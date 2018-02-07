@@ -15,13 +15,13 @@ ctr = input('Bot control page[Example: User talk:bot]: ')
 qusr = input('ZHWP user[For query on ZHWP]: ')
 qpwd = input('ZHWP password[For query on ZHWP]: ')
 
-maintext = maintext.replace("dp.login('','')","dp.login("+usr+","+pwd+")")
-cleantext = cleantext.replace("dp.login('','')","dp.login("+usr+","+pwd+")")
-maintext = maintext.replace("logdir = ''", "logdir = "+logdir)
-cleantext = cleantext.replace("logdir = ''", "logdir = "+logdir)
+maintext = maintext.replace("dp.login('','')","dp.login('"+usr+"','"+pwd+"')")
+cleantext = cleantext.replace("dp.login('','')","dp.login('"+usr+"','"+pwd+"')")
+maintext = maintext.replace("logdir = ''", "logdir = '"+logdir+"'")
+cleantext = cleantext.replace("logdir = ''", "logdir = '"+logdir+"'")
 maintext = maintext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
 cleantext = cleantext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
-qtext = qtext.replace("zh.login('','')", "zh.login("+qusr+","+qpwd+")")
+qtext = qtext.replace("zh.login('','')", "zh.login('"+qusr+"','"+qpwd+"')")
 with open(logdir, 'w'):
     pass
 
