@@ -28,9 +28,9 @@ with open(logdir, 'w'):
 with open('zhdel.py', 'w') as main:
     main.write(maintext)
 with open('clean.py', 'w') as main:
-    main.write(maintext)
-with open('zhdel.py', 'w') as main:
-    main.write(maintext)
+    main.write(cleantext)
+with open('query.py', 'w') as main:
+    main.write(qtext)
 
 print('Job done. You can run the scripts now.\n')
 print('################ CAUTION ##################')
