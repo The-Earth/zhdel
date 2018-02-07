@@ -1,4 +1,4 @@
-﻿import mwclient
+import mwclient
 import os
 
 zh = mwclient.Site('zh.wikipedia.org')
