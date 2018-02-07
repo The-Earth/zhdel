@@ -21,13 +21,13 @@ maintext = maintext.replace("logdir = ''", "logdir = '"+logdir+"'")
 cleantext = cleantext.replace("logdir = ''", "logdir = '"+logdir+"'")
 maintext = maintext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
 cleantext = cleantext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
-qtext = qtext.replace("zh.login('','')", "zh.login('"+qusr+"','"+qpwd+"')\n")
+qtext = qtext.replace("zh.login('','')", "zh.login('"+qusr+"','"+qpwd+"')")
 
 try:
     with open(logdir, 'w'):
         pass
 except FileNotFoundError:
-    print('Failed to creat log file at', logdir, ', Please manually creat it.\n')
+    print('\nFailed to creat log file at', logdir, ', Please manually creat it.\n')
 
 with open('zhdel.py', 'w') as main:
     main.write(maintext)
