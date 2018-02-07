@@ -17,11 +17,13 @@ qpwd = input('ZHWP password[For query on ZHWP]: ')
 
 maintext = maintext.replace("dp.login('','')","dp.login("+usr+","+pwd+")")
 cleantext = cleantext.replace("dp.login('','')","dp.login("+usr+","+pwd+")")
-maintext = maintext.replace("logdir = ''", "logdir = "+logir)
-cleantext = cleantext.replace("logdir = ''", "logdir = "+logir)
+maintext = maintext.replace("logdir = ''", "logdir = "+lodir)
+cleantext = cleantext.replace("logdir = ''", "logdir = "+lodir)
 maintext = maintext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
 cleantext = cleantext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
 qtext = qtext.replace("zh.login('','')", "zh.login("+qusr+","+qpwd+")")
+with open(logdir, 'w'):
+    pass
 
 with open('zhdel.py', 'w') as main:
     main.write(maintext)
