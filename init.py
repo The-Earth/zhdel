@@ -31,10 +31,10 @@ except FileNotFoundError:
 
 with open('zhdel.py', 'w') as main:
     main.write(maintext)
-with open('clean.py', 'w') as main:
-    main.write(cleantext)
-with open('query.py', 'w') as main:
-    main.write(qtext)
+with open('clean.py', 'w') as clean:
+    clean.write(cleantext)
+with open('query.py', 'w', encoding="utf-8") as query:
+    query.write(qtext)
 
 print('\nJob done. You can run the scripts now.\n')
 print('################ CAUTION ##################')
