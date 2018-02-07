@@ -19,8 +19,8 @@ maintext = maintext.replace("dp.login('','')","dp.login('"+usr+"','"+pwd+"')")
 cleantext = cleantext.replace("dp.login('','')","dp.login('"+usr+"','"+pwd+"')")
 maintext = maintext.replace("logdir = ''", "logdir = '"+logdir+"'")
 cleantext = cleantext.replace("logdir = ''", "logdir = '"+logdir+"'")
-maintext = maintext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
-cleantext = cleantext.replace("dp.Pages['']", "dp.Pages["+ctr+"]")
+maintext = maintext.replace("dp.Pages['']", "dp.Pages['"+ctr+"']")
+cleantext = cleantext.replace("dp.Pages['']", "dp.Pages['"+ctr+"']")
 qtext = qtext.replace("zh.login('','')", "zh.login('"+qusr+"','"+qpwd+"')")
 
 try:
