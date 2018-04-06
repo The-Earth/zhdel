@@ -9,7 +9,7 @@ logdir = ''
 dp.login('','') #Bot user name & password
 print('Login successfully!')
 
-def status(title,typ=''):
+def status(title):
 	wpp = zh.Pages[title]
 	wpt = wpp.text()
 	dpp = dp.Pages[title]

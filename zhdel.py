@@ -12,8 +12,8 @@ logdir = ''
 dp.login('','') #Bot user name & password
 print('Login successfully!')
 
-def fetch(title,typ):
-	sta = status(title,typ)
+def fetch(title):
+	sta = status(title)
 	print('Checking',title,':',sta)
 	if sta == 'update' or sta == 'new':
 		page = zh.Pages[title]
@@ -51,7 +51,7 @@ def revoke():
 	except EditError:
 		pass
 
-def status(title,typ=''):
+def status(title):
 	wpp = zh.Pages[title]
 	wpt = wpp.text()
 	dpp = dp.Pages[title]
@@ -70,7 +70,7 @@ def status(title,typ=''):
 
 def main():
 	for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'):
-		fetch(nom['title'],'{{d|')
+		fetch(nom['title'])
 
 def kill():
 	talk = dp.Pages['']     #Bot control page
