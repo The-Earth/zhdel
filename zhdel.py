@@ -68,27 +68,9 @@ def status(title,typ=''):
 	else:
 		return 'well'
 
-def d():
-	for nom in zh.search(r'insource:/\{\{(D|d)\|/'):
-		fetch(nom['title'],'{{d|')
-
-def delt():
-	for nom in zh.search(r'insource:/\{\{(D|d)elete\|/'):
-		fetch(nom['title'],'{{delete|')
-
-def afd():
-	for nom in zh.search(r'insource:/\{\{(A|a)fd\|/'):
-		fetch(nom['title'],'{{afd|')
-
-def vfd():
-	for nom in zh.search(r'insource:/\{\{(V|v)fd\|/'):
-		fetch(nom['title'],'{{vfd|')
-
 def main():
-	d()
-	afd()
-	vfd()
-	delt()
+	for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'):
+		fetch(nom['title'],'{{d|')
 
 def kill():
 	talk = dp.Pages['']     #Bot control page
