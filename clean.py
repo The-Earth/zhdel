@@ -1,12 +1,14 @@
 import mwclient
 from mwclient.errors import APIError
 import time
+import re
 
 zh = mwclient.Site('zh.wikipedia.org')
 dp = mwclient.Site('zhdel.miraheze.org')
 logdir = ''
+deltemp = re.compile(r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now ?commons|ncd)\s*(\||}})|(db|vfd)-)') #Reg from AF197
 
-dp.login('','') #Bot user name & password
+dp.login('','') #Username and password
 print('Login successfully!')
 
 def status(title):
@@ -19,7 +21,7 @@ def status(title):
 		return 'deleted'
 	elif '!nobot!' in dpt:
 		return 'nobot'
-	elif wpp.exists and not ((r'{{d|' in examt) or (r'{{delete|' in examt) or (r'{{vfd|' in examt) or (r'{{afd|' in examt)):
+	elif wpp.exists and deltemp.match(wpt) == None:
 		return 'kept'
 	else:
 		return 'well'
@@ -63,7 +65,7 @@ def logdelete(title):
 		log.write(logtext)
 
 def kill():
-	talk = dp.Pages['']     #Bot control page
+	talk = dp.Pages[''] #Bot control page
 	talktxt = talk.text()
 	if '!stop!' in  talktxt:
 		return True

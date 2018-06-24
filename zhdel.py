@@ -9,7 +9,7 @@ zh = mwclient.Site('zh.wikipedia.org')
 dp = mwclient.Site('zhdel.miraheze.org')
 logdir = ''
 
-dp.login('','') #Bot user name & password
+dp.login('','') #Username and password
 print('Login successfully!')
 
 def fetch(title):
@@ -18,23 +18,28 @@ def fetch(title):
     if sta == 'update' or sta == 'new':
         page = zh.Pages[title]
         rev = next(page.revisions())
-        by = '由[[w:zh:User:%s|%s]]于%s年%s月%s日 %s:%s:%s(UTC)做出的[[w:zh:Special:permalink/%s|版本]]，编辑摘要：%s' % (rev['user'],rev['user'],rev['timestamp'].tm_year,rev['timestamp'].tm_mon,rev['timestamp'].tm_mday,rev['timestamp'].tm_hour,rev['timestamp'].tm_min,rev['timestamp'].tm_sec,rev['revid'],rev['comment'])
+        by = '由[[w:zh:User:%s|%s]]于%s年%s月%s日 %s:%s:%s(UTC)做出的[[w:zh:Special:permalink/%s|版本%s]]，编辑摘要：%s' % (rev['user'],rev['user'],rev['timestamp'].tm_year,rev['timestamp'].tm_mon,rev['timestamp'].tm_mday,rev['timestamp'].tm_hour,rev['timestamp'].tm_min,rev['timestamp'].tm_sec,rev['revid'],rev['revid'],rev['comment'])
         new = dp.Pages[title]
-        txt = by + '\n' + page.text()
+        talk = dp.Pages['Talk:'+title]
+        txt = page.text()
         if sta == 'update':
             try:
                 new.save(txt,'Bot: Page updated.')
+                talk.save(by,'Attribution information')
             except EditError:
-                revoke()	#revoke auto-confirmed
-                new.save(txt,'Bot: Page updated.')	#retry
+                revoke()    #revoke auto-confirmed
+                new.save(txt,'Bot: Page updated.')    #retry
+                talk.save(by,'Attribution information')
         elif sta == 'new':
             try:
                 new.save(txt,'Bot: New page collected.')
+                talk.save(by,'Attribution information')
                 with open(logdir,'a') as log:
                     log.write(title+'\n')
             except EditError:
-                revoke()	#revoke auto-confirmed
-                new.save(txt,'Bot: New page collected.')	#retry
+                revoke()    #revoke auto-confirmed
+                new.save(txt,'Bot: New page collected.')    #retry
+                talk.save(by,'Attribution information')
                 with open(logdir,'a') as log:
                     log.write(title+'\n')
 
@@ -71,11 +76,11 @@ def status(title):
         return 'well'
 
 def main():
-    for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'):
+    for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'): #Reg from AF197
         fetch(nom['title'])
 
 def kill():
-    talk = dp.Pages['']     #Bot control page
+    talk = dp.Pages[''] #Bot control page
     talktxt = talk.text()
     if '!stop!' in  talktxt:
         return True
