@@ -12,70 +12,70 @@ dp.login('','') #Username and password
 print('Login successfully!')
 
 def status(title):
-	wpp = zh.Pages[title]
-	wpt = wpp.text()
-	dpp = dp.Pages[title]
-	dpt = dpp.text()
-	examt = wpt.lower()
-	if not wpp.exists:
-		return 'deleted'
-	elif '!nobot!' in dpt:
-		return 'nobot'
-	elif wpp.exists and deltemp.match(wpt) == None:
-		return 'kept'
-	else:
-		return 'well'
+    wpp = zh.Pages[title]
+    wpt = wpp.text()
+    dpp = dp.Pages[title]
+    dpt = dpp.text()
+    examt = wpt.lower()
+    if not wpp.exists:
+        return 'deleted'
+    elif '!nobot!' in dpt:
+        return 'nobot'
+    elif wpp.exists and deltemp.search(wpt) == None:
+        return 'kept'
+    else:
+        return 'well'
 
 def deletePage(title):
-	dpp = dp.Pages[title]
-	dpp.delete('Page kept on zhwp.')
-	logdelete(title)
-	print(title,'kept on zhwp and deleted on zhdel.')
+    dpp = dp.Pages[title]
+    dpp.delete('Page kept on zhwp.')
+    logdelete(title)
+    print(title,'kept on zhwp and deleted on zhdel.')
 
 def clean():
-	titlist = list(open(logdir))
+    titlist = list(open(logdir))
 
-	for i in range(len(titlist)):
-		title = titlist[i].rstrip()
-		sta = status(title)
-		if sta == 'nobot':
-			continue
-		
-		elif  sta == 'deleted':
-			logdelete(title)
-			print(title,'deleted on zhwp.')
-		
-		elif sta == 'kept':
-			try:
-				deletePage(title)
-			except APIError as e:
-				if e.code =='badtoken':
-					print('Got bad token, retrying')
-					dp.tokens = {}   # clear token cache
-					deletePage(title)	#Retry
-		
-		elif sta == 'well':
-			print(title,': well')
+    for i in range(len(titlist)):
+        title = titlist[i].rstrip()
+        sta = status(title)
+        if sta == 'nobot':
+            continue
+        
+        elif  sta == 'deleted':
+            logdelete(title)
+            print(title,'deleted on zhwp.')
+        
+        elif sta == 'kept':
+            try:
+                deletePage(title)
+            except APIError as e:
+                if e.code =='badtoken':
+                    print('Got bad token, retrying')
+                    dp.tokens = {}   # clear token cache
+                    deletePage(title)    #Retry
+        
+        elif sta == 'well':
+            print(title,': well')
 
 def logdelete(title):
-	with open(logdir,'r') as log:
-		logtext = log.read()
-	logtext = logtext.replace(title+'\n','')
-	with open(logdir,'w') as log:
-		log.write(logtext)
+    with open(logdir,'r') as log:
+        logtext = log.read()
+    logtext = logtext.replace(title+'\n','')
+    with open(logdir,'w') as log:
+        log.write(logtext)
 
 def kill():
-	talk = dp.Pages[''] #Bot control page
-	talktxt = talk.text()
-	if '!stop!' in  talktxt:
-		return True
-	else:
-		return False
+    talk = dp.Pages[''] #Bot control page
+    talktxt = talk.text()
+    if '!stop!' in  talktxt:
+        return True
+    else:
+        return False
 
 while True:
-	if kill():
-		break
-	else:
-		clean()
-		print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),'Sleeping: 3 hours...',end='\n\n')
-		time.sleep(10800)
+    if kill():
+        break
+    else:
+        clean()
+        print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),'Sleeping: 3 hours...',end='\n\n')
+        time.sleep(10800)
