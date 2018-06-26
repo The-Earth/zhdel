@@ -13,10 +13,9 @@ print('Login successfully!')
 
 def status(title):
     wpp = zh.Pages[title]
-    wpt = wpp.text()
+    wpt = wpp.text().lower()
     dpp = dp.Pages[title]
     dpt = dpp.text()
-    examt = wpt.lower()
     if not wpp.exists:
         return 'deleted'
     elif '!nobot!' in dpt:
