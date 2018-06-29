@@ -26,8 +26,8 @@ def status(title):
         return 'well'
 
 def deletePage(title):
-    dpp = dp.Pages[title]
-    dpp.delete('Page kept on zhwp.')
+    dp.Pages[title].delete('Page kept on zhwp.')
+    dp.Pages['Talk:'+title].delete('Page kept on zhwp.')
     logdelete(title)
     print(title,'kept on zhwp and deleted on zhdel.')
 
