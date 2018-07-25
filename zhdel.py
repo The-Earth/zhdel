@@ -8,6 +8,7 @@ print(stime,'Bot started.')
 zh = mwclient.Site('zh.wikipedia.org')
 dp = mwclient.Site('zhdel.miraheze.org')
 logdir = ''
+skip=('')
 
 dp.login('','') #Username and password
 print('Login successfully!')
@@ -15,6 +16,9 @@ print('Login successfully!')
 def fetch(title):
     sta = status(title)
     print('Checking',title,':',sta)
+    if sta == 'skip':
+        print('Skipped %s' % title)
+        pass
     if sta == 'update' or sta == 'new':
         page = zh.Pages[title]
         rev = next(page.revisions())
@@ -59,6 +63,8 @@ def revoke():
         pass
 
 def status(title):
+    if title in skip:
+        return 'skip'
     wpp = zh.Pages[title]
     wpt = wpp.text()
     dpp = dp.Pages[title]

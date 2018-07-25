@@ -7,11 +7,14 @@ zh = mwclient.Site('zh.wikipedia.org')
 dp = mwclient.Site('zhdel.miraheze.org')
 logdir = ''
 deltemp = re.compile(r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now ?commons|ncd)\s*(\||}})|(db|vfd)-)') #Reg from AF197
+skip=('')
 
 dp.login('','') #Username and password
 print('Login successfully!')
 
 def status(title):
+    if title in skip:
+        return 'skip'
     wpp = zh.Pages[title]
     wpt = wpp.text().lower()
     dpp = dp.Pages[title]
@@ -37,6 +40,9 @@ def clean():
     for i in range(len(titlist)):
         title = titlist[i].rstrip()
         sta = status(title)
+        if sta == 'skip':
+            print('Skipped %s' % title)
+            continue
         if sta == 'nobot':
             continue
         
