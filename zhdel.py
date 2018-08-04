@@ -27,39 +27,19 @@ def fetch(title):
         talk = dp.Pages['Talk:'+title]
         txt = page.text()
         if sta == 'update':
-            try:
-                new.save(txt,'Bot: Page updated.')
-                talk.save(by,'Attribution information')
-            except EditError:
-                revoke()    #revoke auto-confirmed
-                new.save(txt,'Bot: Page updated.')    #retry
-                talk.save(by,'Attribution information')
+            new.save(txt,'Bot: Page updated.')
+            talk.save(by,'Attribution information')
         elif sta == 'new':
-            try:
-                new.save(txt,'Bot: New page collected.')
-                talk.save(by,'Attribution information')
-                with open(logdir,'a') as log:
-                    log.write(title+'\n')
-            except EditError:
-                revoke()    #revoke auto-confirmed
-                new.save(txt,'Bot: New page collected.')    #retry
-                talk.save(by,'Attribution information')
-                with open(logdir,'a') as log:
-                    log.write(title+'\n')
+            new.save(txt,'Bot: New page collected.')
+            talk.save(by,'Attribution information')
+            with open(logdir,'a') as log:
+                log.write(title+'\n')
 
     elif sta == 'deleted':
         pass
     elif sta == 'nobot':
         pass
     elif sta == 'well':
-        pass
-
-def revoke():
-    print('Autoconfirmed, revoke it.')
-    talk = dp.Pages['User talk:Tiger-bot']
-    try:
-        talk.save('!revoke!')
-    except EditError:
         pass
 
 def status(title):
