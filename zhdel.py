@@ -50,10 +50,10 @@ def status(title):
     dpp = dp.Pages[title]
     dpt = dpp.text()
     loglist = list(open(logdir))
-    if not title+'\n' in loglist:
-        return 'new'
     if not wpp.exists:
         return 'deleted'
+    if not title+'\n' in loglist:
+        return 'new'
     if wpt != dpt:
         return 'update'
     if '!nobot!' in dpt:
