@@ -29,10 +29,13 @@ def status(title):
         return 'well'
 
 def deletePage(title):
+    print('Deleting %s' % title)
     dp.Pages[title].delete('Page kept on zhwp.')
-    dp.Pages['Talk:'+title].delete('Page kept on zhwp.')
-    logdelete(title)
-    print(title,'kept on zhwp and deleted on zhdel.')
+    try:
+        dp.Pages['Talk:'+title].delete('Page kept on zhwp.')
+    finally:
+        logdelete(title)
+        print(title,'kept on zhwp and deleted on zhdel.')
 
 def clean():
     titlist = list(open(logdir))
