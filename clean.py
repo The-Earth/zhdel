@@ -16,7 +16,7 @@ def status(title):
     if title in skip:
         return 'skip'
     wpp = zh.Pages[title]
-    wpt = wpp.text().lower()
+    wpt = wpp.text()['*'].lower()
     dpp = dp.Pages[title]
     dpt = dpp.text()
     if not wpp.exists:
@@ -72,18 +72,7 @@ def logdelete(title):
     with open(logdir,'w') as log:
         log.write(logtext)
 
-def kill():
-    talk = dp.Pages[''] #Bot control page
-    talktxt = talk.text()
-    if '!stop!' in  talktxt:
-        return True
-    else:
-        return False
-
 while True:
-    if kill():
-        break
-    else:
-        clean()
-        print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),'Sleeping: 3 hours...',end='\n\n')
-        time.sleep(10800)
+    clean()
+    print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()),'Sleeping: 3 hours...',end='\n\n')
+    time.sleep(10800)
