@@ -25,7 +25,7 @@ def fetch(title):
         by = '由[[w:zh:User:%s|%s]]于%s年%s月%s日 %s:%s:%s(UTC)做出的[[w:zh:Special:permalink/%s|版本%s]]，编辑摘要：%s' % (rev['user'],rev['user'],rev['timestamp'].tm_year,rev['timestamp'].tm_mon,rev['timestamp'].tm_mday,rev['timestamp'].tm_hour,rev['timestamp'].tm_min,rev['timestamp'].tm_sec,rev['revid'],rev['revid'],rev['comment'])
         new = dp.Pages[title]
         talk = dp.Pages['Talk:'+title]
-        txt = page.text()
+        txt = page.text()['*']
         if sta == 'update':
             new.save(txt,'Bot: Page updated.')
             talk.save(by,'Attribution information')
@@ -46,9 +46,9 @@ def status(title):
     if title in skip:
         return 'skip'
     wpp = zh.Pages[title]
-    wpt = wpp.text()
+    wpt = wpp.text()['*']
     dpp = dp.Pages[title]
-    dpt = dpp.text()
+    dpt = dpp.text()['*']
     loglist = list(open(logdir))
     if not wpp.exists:
         return 'deleted'
@@ -65,17 +65,6 @@ def main():
     for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'): #Reg from AF197
         fetch(nom['title'])
 
-def kill():
-    talk = dp.Pages[''] #Bot control page
-    talktxt = talk.text()
-    if '!stop!' in  talktxt:
-        return True
-    else:
-        return False
-
 while True:
-    if kill():
-        break
-    else:
-        main()
-        time.sleep(60)
+    main()
+    time.sleep(60)

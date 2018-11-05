@@ -19,4 +19,5 @@ zhdel.miraheze.org 是一个收集即将被删除的中文维基百科条目的�
 
 ## 依赖于
 - Python 3.x
-- [mwclient](https://github.com/mwclient/mwclient) >=0.8.5 `pip install mwclient>=0.8.5`
+- [mwclient](https://github.com/mwclient/mwclient) >=0.9.2 `pip install mwclient>=0.9.2`
+- Mediawiki >= 1.32
