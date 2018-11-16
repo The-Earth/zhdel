@@ -15,14 +15,14 @@ print('Login successfully!')
 def status(title):
     if title in skip:
         return 'skip'
-    if '!nobot!' in dpt:
-        return 'nobot'
     wpp = zh.Pages[title]
     if not wpp.exists:
         return 'deleted'
     wpt = wpp.text()['*'].lower()
     dpp = dp.Pages[title]
     dpt = dpp.text()
+    if '!nobot!' in dpt:
+        return 'nobot'
     if wpp.exists and deltemp.search(wpt) == None:
         return 'kept'
     else:
