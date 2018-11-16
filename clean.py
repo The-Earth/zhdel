@@ -6,7 +6,7 @@ import re
 zh = mwclient.Site('zh.wikipedia.org')
 dp = mwclient.Site('zhdel.miraheze.org')
 logdir = ''
-deltemp = re.compile(r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now ?commons|ncd)\s*(\||}})|(db|vfd)-)') #Reg from AF197
+deltemp = re.compile(r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now ?commons|ncd)\s*(\||}})|(db|vfd)-)') # Reg from AF 197
 skip=('')
 
 dp.login('','') #Username and password
@@ -16,14 +16,14 @@ def status(title):
     if title in skip:
         return 'skip'
     wpp = zh.Pages[title]
+    if not wpp.exists:
+        return 'deleted'
     wpt = wpp.text()['*'].lower()
     dpp = dp.Pages[title]
     dpt = dpp.text()
-    if not wpp.exists:
-        return 'deleted'
-    elif '!nobot!' in dpt:
+    if '!nobot!' in dpt:
         return 'nobot'
-    elif wpp.exists and deltemp.search(wpt) == None:
+    if wpp.exists and deltemp.search(wpt) == None:
         return 'kept'
     else:
         return 'well'
