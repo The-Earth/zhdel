@@ -18,7 +18,7 @@ def status(title):
     wpp = zh.Pages[title]
     if not wpp.exists:
         return 'deleted'
-    wpt = wpp.text()['*'].lower()
+    wpt = wpp.text().lower()
     dpp = dp.Pages[title]
     dpt = dpp.text()
     if '!nobot!' in dpt:
