@@ -10,7 +10,6 @@ zhdel.miraheze.org 是一个收集即将被删除的中文维基百科条目的�
 目前的区别：
 
 - actual 在删除讨论页时使用了 try / master 没有
-- actual 考虑了 miraheze 目前未升级至 MediaWiki 1.32 因而 `page.text()` 仍然返回 `str` / master 默认全部站点使用 MediaWiki > 1.32
 
 ## zhdel.py
 主脚本。搜索含有删除模板的中文维基百科条目，并搬运。`logdir`设置日志文件路径，`skip`设置暂时忽略的标题（可能会出现无法解决的问题导致中断，忽略问题条目以暂时避开）。
