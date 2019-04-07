@@ -29,8 +29,22 @@ def status(title):
         return 'well'
 
 def deletePage(title):
-    dp.Pages[title].delete('Page kept on zhwp.')
-    dp.Pages['Talk:'+title].delete('Page kept on zhwp.')
+    try:
+        dp.Pages[title].delete('No longer need this page since it was kept on zhwp.')
+    except APIError as e:
+        if e.code =='badtoken':
+            print('Got bad token, retrying')
+            dp.tokens = {}   # clear token cache
+            dp.Pages[title].delete('No longer need this page since it was kept on zhwp.')
+        else: raise
+    
+    try:
+        dp.Pages['Talk:'+title].delete('Talk page without main page.')
+    except APIError as e:
+        if e.code =='badtoken':
+            print('Got bad token, retrying')
+            dp.tokens = {}   # clear token cache
+            dp.Pages['Talk:'+title].delete('Talk page without main page.')
     logdelete(title)
     print(title,'kept on zhwp and deleted on zhdel.')
 
@@ -51,13 +65,7 @@ def clean():
             print(title,'deleted on zhwp.')
         
         elif sta == 'kept':
-            try:
-                deletePage(title)
-            except APIError as e:
-                if e.code =='badtoken':
-                    print('Got bad token, retrying')
-                    dp.tokens = {}   # clear token cache
-                    deletePage(title)    #Retry
+            deletePage(title)
         
         elif sta == 'well':
             print(title,': well')
