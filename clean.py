@@ -41,10 +41,12 @@ def deletePage(title):
     try:
         dp.Pages['Talk:'+title].delete('Talk page without main page.')
     except APIError as e:
-        if e.code =='badtoken':
+        if e.code == 'badtoken':
             print('Got bad token, retrying')
             dp.tokens = {}   # clear token cache
             dp.Pages['Talk:'+title].delete('Talk page without main page.')
+        elif e.code == 'missingtitle':
+            pass
     logdelete(title)
     print(title,'kept on zhwp and deleted on zhdel.')
 
