@@ -20,16 +20,11 @@ def fetch(title, token):
         print('Skipped %s' % title)
         pass
     if sta == 'update' or sta == 'new':
-        full = 1
         if count_revisions(title) > 100:
-            full = 0
+            dp.api(action='import', token=token, interwikisource='zhwikipedia', interwikipage=title)    # import the latest revision
         else:
-            full = 1
-        
-        if full:
-            dp.api(action='import', token=token, interwikisource='zhwikipedia', interwikipage=title, fullhistory=1)
-        else:
-            dp.api(action='import', token=token, interwikisource='zhwikipedia', interwikipage=title)
+            dp.api(action='import', token=token, interwikisource='zhwikipedia', interwikipage=title, fullhistory=1) # import all revisions
+
         if sta == 'new':
             with open(logdir,'a') as log:
                 log.write(title+'\n')
