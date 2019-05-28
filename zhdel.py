@@ -18,7 +18,8 @@ def fetch(title, token):
     print('Checking',title,':',sta)
     if sta == 'skip':
         print('Skipped %s' % title)
-        pass
+        return None
+    
     if sta == 'update' or sta == 'new':
         if count_revisions(title) > 100:
             dp.api(action='import', token=token, interwikisource='zhwikipedia', interwikipage=title)    # import the latest revision
