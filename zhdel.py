@@ -1,6 +1,7 @@
 import mwclient
 from mwclient.errors import EditError
 import time
+import multiprocessing
 
 stime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
 print(stime,'Bot started.')
@@ -68,8 +69,12 @@ def count_revisions(title):
 
 def main():
     token = dp.api(action='query', meta='tokens')['query']['tokens']['csrftoken']
+    pool = multiprocessing.Pool(12)
     for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'): #Reg from AF197
-        fetch(nom['title'], token)
+        pool.apply_async(fetch, args=(nom['title'], token))
+
+    pool.close()
+    pool.join()
 
 while True:
     main()
