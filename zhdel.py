@@ -1,8 +1,12 @@
 import mwclient
-from mwclient.errors import EditError
 import time
-import multiprocessing
+import json
+import re
+from mwclient.errors import EditError
+from sseclient import SSEClient as EventSource
 
+
+pattern = re.compile(r'\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)')
 stime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
 print(stime,'Bot started.')
 
@@ -68,14 +72,21 @@ def count_revisions(title):
 
 
 def main():
-    token = dp.api(action='query', meta='tokens')['query']['tokens']['csrftoken']
-    pool = multiprocessing.Pool(12)
-    for nom in zh.search(r'insource:/\{\{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)/'): #Reg from AF197
-        pool.apply_async(fetch, args=(nom['title'], token))
-
-    pool.close()
-    pool.join()
-
+    event_url = 'https://stream.wikimedia.org/v2/stream/recentchange'
+    for event in EventSource(event_url):
+        if event.event == 'message':
+            try:
+                change = json.loads(event.data)
+            except ValueError:
+                pass
+            else:
+                site = change['meta']['domain']
+                if not site == 'zh.wikipedia.org':
+                    continue
+                title = change['title']
+                if not pattern.search(zh.Pages[title].text()) == None:
+                    token = dp.api(action='query', meta='tokens')['query']['tokens']['csrftoken']
+                    fetch(title, token)
+                
 while True:
     main()
-    time.sleep(60)
