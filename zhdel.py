@@ -42,7 +42,8 @@ def fetch(title, token):
         if sta == 'new':
             with open(logdir, 'a') as log:
                 log.write(title + '\n')
-            tgbot.send_message(config['tg_chat_id'], text=config['tg_push_text'].format(title=title), parse_mode='HTML')
+            tgbot.send_message(config['tg_chat_id'], text=config['tg_push_text'].format(title=title), parse_mode='HTML',
+                               disable_web_page_preview=True)
 
     elif sta == 'deleted':
         pass
