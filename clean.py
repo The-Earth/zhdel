@@ -6,7 +6,7 @@ import mwclient
 from mwclient.errors import APIError
 
 zh = mwclient.Site('zh.wikipedia.org')
-dp = mwclient.Site('zhdel.miraheze.org')
+dp = mwclient.Site('zhdel.miraheze.org', clients_useragent='User:Tiger-bot operated by User:Tiger')
 config = json.load(open('config.json', 'r', encoding='utf-8'))
 
 logdir = config['log']
