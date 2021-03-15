@@ -32,12 +32,12 @@ def fetch(title, token):
         return None
 
     if sta == 'update' or sta == 'new':
-        if count_revisions(title) > 100:
+        if full_history_deter(title):
             dp.api(action='import', summary=sta, token=token, interwikisource='zhwikipedia',
-                   interwikipage=title)  # import the latest revision
+                   interwikipage=title, fullhistory=1)  # import all revisions
         else:
-            dp.api(action='import', summary=sta, token=token, interwikisource='zhwikipedia', interwikipage=title,
-                   fullhistory=1)  # import all revisions
+            dp.api(action='import', summary=sta, token=token, interwikisource='zhwikipedia',
+                   interwikipage=title)  # import the latest revisions
 
         if sta == 'new':
             with open(logdir, 'a') as log:
@@ -73,13 +73,14 @@ def status(title):
         return 'well'
 
 
-def count_revisions(title):
+def full_history_deter(title):
     wpp = zh.Pages[title]
     sum = 0
     revs = wpp.revisions()
     for _ in revs:
         sum += 1
-    return sum
+    copyvio = re.search(r'{{(\s*[Cc]opyvio|侵权|[Cc]!)\s*(\||}})', wpp.text())
+    return sum < 100 or not copyvio
 
 
 def main():

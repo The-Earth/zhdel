@@ -13,7 +13,5 @@ zhdel.miraheze.org 是一个收集即将被删除的中文维基百科条目的�
 同目录下有一个用于记录已提删未删除之页面名的文件，即`logdir`指定的路径。
 
 ## 依赖于
-- Python 3.6
-- [mwclient](https://github.com/mwclient/mwclient) != 0.9.2 `pip install mwclient`
+- [mwclient](https://github.com/mwclient/mwclient) != 0.10.1
 - Mediawiki >= 1.31
-
