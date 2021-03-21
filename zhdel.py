@@ -80,7 +80,7 @@ def full_history_deter(title):
     for _ in revs:
         sum += 1
     copyvio = re.search(r'{{(\s*[Cc]opyvio|侵权|[Cc]!)\s*(\||}})', wpp.text())
-    return sum < 100 or not copyvio
+    return sum < 100 and not copyvio
 
 
 def main():
