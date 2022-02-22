@@ -3,6 +3,7 @@ import re
 import time
 
 import mwclient
+import requests
 from mwclient.errors import APIError
 
 zh = mwclient.Site('zh.wikipedia.org')
@@ -91,6 +92,9 @@ def log_delete(title):
 
 
 while True:
-    clean()
+    try:
+        clean()
+    except requests.HTTPError:
+        pass
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), 'Sleeping: 3 hours...', end='\n\n')
     time.sleep(10800)
