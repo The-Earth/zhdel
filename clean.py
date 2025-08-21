@@ -24,9 +24,11 @@ def status(title):
     if title in skip:
         return 'skip'
     wpp = zh.Pages[title]
+    time.sleep(0.5)
     if not wpp.exists:
         return 'deleted'
     wpt = wpp.text().lower()
+    time.sleep(0.5)
     dpp = dp.Pages[title]
     dpt = dpp.text()
     if '!nobot!' in dpt:
