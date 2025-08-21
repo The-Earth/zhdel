@@ -3,8 +3,9 @@ import re
 import time
 
 import mwclient
+import requests
 from mwclient.errors import InvalidPageTitle
-from sseclient import SSEClient as EventSource
+from requests_sse import EventSource, InvalidStatusCodeError, InvalidContentTypeError
 
 import catbot
 
@@ -75,37 +76,49 @@ def status(title):
 
 def full_history_deter(title):
     wpp = zh.Pages[title]
-    sum = 0
+    sum_ = 0
     revs = wpp.revisions()
     for _ in revs:
-        sum += 1
+        sum_ += 1
     copyvio = re.search(r'{{(\s*[Cc]opyvio|侵权|[Cc]!)\s*(\||}})', wpp.text())
-    return sum < 100 and not copyvio
+    return sum_ < 100 and not copyvio
 
 
 def main():
     event_url = 'https://stream.wikimedia.org/v2/stream/recentchange'
     ssekw = {'proxies': {'https': config['proxy']['proxy_url']}} if config['proxy']['enable'] else {}
 
-    for event in EventSource(event_url, **ssekw):
-        if event.event == 'message':
-            try:
-                change = json.loads(event.data.encode('utf-8').decode('utf-8'))
-            except ValueError:
-                continue
-            site = change['meta']['domain']
-            if site != 'zh.wikipedia.org' or change['type'] != 'edit':
-                continue
-            title = change['title']
-            try:
-                wpp = zh.Pages[title]
-            except InvalidPageTitle:
-                print(f'InvalidPageTitle: {title}')
-                continue
-            if wpp.namespace == 0 and not pattern.search(wpp.text()) is None:
-                token = dp.api(action='query', meta='tokens')['query']['tokens']['csrftoken']
-                fetch(title, token)
+    with EventSource(event_url, **ssekw) as source:
+        try:
+            for event in source:
+                if event.type == 'message':
+                    try:
+                        change = json.loads(event.data.encode('utf-8').decode('utf-8'))
+                    except ValueError:
+                        continue
+                    site = change['meta']['domain']
+                    if site != 'zh.wikipedia.org' or change['type'] != 'edit':
+                        continue
+                    title = change['title']
+                    try:
+                        wpp = zh.Pages[title]
+                    except InvalidPageTitle:
+                        print(f'InvalidPageTitle: {title}')
+                        continue
+                    if wpp.namespace == 0 and not pattern.search(wpp.text()) is None:
+                        token = dp.api(action='query', meta='tokens')['query']['tokens']['csrftoken']
+                        fetch(title, token)
+                time.sleep(0.1)
+        except InvalidStatusCodeError:
+            pass
+        except InvalidContentTypeError:
+            pass
+        except requests.RequestException:
+            pass
+        except StopIteration:
+            pass
 
 
-while True:
-    main()
+if __name__ == '__main__':
+    while True:
+        main()

@@ -1,4 +1,4 @@
-sseclient
+requests-sse
 mwclient
 git+https://github.com/The-Earth/catbot.git#egg=catbot
 requests

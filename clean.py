@@ -12,7 +12,8 @@ config = json.load(open('config.json', 'r', encoding='utf-8'))
 
 logdir = config['log']
 deltemp = re.compile(
-    r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now ?commons|ncd)\s*(\||}})|(db|vfd)-)')  # Reg from AF197
+    r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核|copyvio|侵权|侵權|now '
+    r'?commons|ncd)\s*(\||}})|(db|vfd)-)')  # Reg from AF197
 skip = config['skip']
 
 dp.login(config['zhdel_username'], config['zhdel_password'])
@@ -30,7 +31,7 @@ def status(title):
     dpt = dpp.text()
     if '!nobot!' in dpt:
         return 'nobot'
-    if wpp.exists and deltemp.search(wpt) == None:
+    if wpp.exists and deltemp.search(wpt) is None:
         return 'kept'
     else:
         return 'well'
