@@ -95,7 +95,7 @@ def log_delete(title):
 while True:
     try:
         clean()
-    except requests.HTTPError:
-        pass
+    except requests.RequestException as e:
+        print(e.args[0])
     print(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()), 'Sleeping: 3 hours...', end='\n\n')
     time.sleep(10800)
