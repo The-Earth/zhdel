@@ -1,6 +1,7 @@
 import json
 import re
 import time
+from typing import Any
 
 import mwclient
 import requests
@@ -86,7 +87,8 @@ def full_history_deter(title):
 
 def main():
     event_url = 'https://stream.wikimedia.org/v2/stream/recentchange'
-    ssekw = {'proxies': {'https': config['proxy']['proxy_url']}} if config['proxy']['enable'] else {}
+    ssekw: dict[str, Any] = {'proxies': {'https': config['proxy']['proxy_url']}} if config['proxy']['enable'] else {}
+    ssekw.update({'headers': {'User-Agent': 'zhdel/1.0.0'}})
 
     with EventSource(event_url, **ssekw) as source:
         try:
