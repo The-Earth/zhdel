@@ -6,7 +6,7 @@ import mwclient
 import requests
 from mwclient.errors import APIError
 
-zh = mwclient.Site('zh.wikipedia.org')
+zh = mwclient.Site('zh.wikipedia.org', clients_useragent='zhdel/1.0.0')
 dp = mwclient.Site('zhdel.miraheze.org', clients_useragent='User:Tiger-bot operated by User:Tiger')
 config = json.load(open('config.json', 'r', encoding='utf-8'))
 

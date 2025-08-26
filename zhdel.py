@@ -16,7 +16,7 @@ stime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
 print(stime, 'Bot started.')
 config = json.load(open('config.json', 'r', encoding='utf-8'))
 
-zh = mwclient.Site('zh.wikipedia.org')
+zh = mwclient.Site('zh.wikipedia.org', clients_useragent='zhdel/1.0.0')
 dp = mwclient.Site('zhdel.miraheze.org', clients_useragent='User:Tiger-bot operated by User:Tiger')
 logdir = config['log']
 skip = config['skip']
