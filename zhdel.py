@@ -16,8 +16,8 @@ stime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
 print(stime, 'Bot started.')
 config = json.load(open('config.json', 'r', encoding='utf-8'))
 
-zh = mwclient.Site('zh.wikipedia.org', clients_useragent='zhdel/1.0.0')
-dp = mwclient.Site('zhdel.miraheze.org', clients_useragent='User:Tiger-bot operated by User:Tiger')
+zh = mwclient.Site('zh.wikipedia.org', clients_useragent=config['wm_user_agent'])
+dp = mwclient.Site('zhdel.miraheze.org', clients_useragent=config['dp_user_agent'])
 logdir = config['log']
 skip = config['skip']
 tgbot = catbot.Bot(config)
@@ -88,7 +88,7 @@ def full_history_deter(title):
 def main():
     event_url = 'https://stream.wikimedia.org/v2/stream/recentchange'
     ssekw: dict[str, Any] = {'proxies': {'https': config['proxy']['proxy_url']}} if config['proxy']['enable'] else {}
-    ssekw.update({'headers': {'User-Agent': 'zhdel/1.0.0'}})
+    ssekw.update({'headers': {'User-Agent': config['wm_user_agent']}})
 
     with EventSource(event_url, **ssekw) as source:
         try:
