@@ -9,6 +9,7 @@ from mwclient.errors import InvalidPageTitle
 from requests_sse import EventSource, InvalidStatusCodeError, InvalidContentTypeError
 
 import catbot
+import catbot.util
 
 pattern = re.compile(
     r'{{\s*((db|d|sd|csd|speedy|delete|速刪|速删|快刪|快删|有爭議|有争议|[vaictumr]fd|delrev|存廢覆核|存废复核)\s*(\||}})|(db|vfd)-)')
@@ -44,8 +45,12 @@ def fetch(title, token):
         if sta == 'new':
             with open(logdir, 'a') as log:
                 log.write(title + '\n')
-            tgbot.send_message(config['tg_chat_id'], text=config['tg_push_text'].format(title=title), parse_mode='HTML',
-                               disable_web_page_preview=True)
+            tgbot.send_message(
+                config['tg_chat_id'],
+                text=config['tg_push_text'].format(title=catbot.util.html_escape(title)),
+                parse_mode='HTML',
+                disable_web_page_preview=True
+            )
 
     elif sta == 'deleted':
         pass
@@ -53,6 +58,7 @@ def fetch(title, token):
         pass
     elif sta == 'well':
         pass
+    return None
 
 
 def status(title):
